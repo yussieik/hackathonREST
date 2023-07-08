@@ -1,4 +1,8 @@
 
+const recipeByCatContainer = document.querySelector('.categories__recipies');
+const categorySelect = document.querySelector('#categorySelect');
+const newest = document.querySelector('.newest');
+
 async function getRecipesList(categoryId) {
     try {
         const response = await fetch('/api/recipes/');
@@ -31,7 +35,18 @@ async function getCategoryList() {
 
             });
             // Call getRecipesList with the first category ID
-            getRecipesList(getData[0].id);
+            //getRecipesList(getData[9].id);
+
+            getData.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category.id;
+                option.textContent = category.name;
+                categorySelect.appendChild(option);
+              });
+        
+              // Display recipes for the initially selected category
+              const initialCategoryId = getData[8].id;
+              await displayRecipesByCategory(initialCategoryId);
         } else {
             throw new Error('Something wrong with fetch');
         }
@@ -64,7 +79,6 @@ function handleCategoryClick(categoryId) {
     };
 }
 
-const recipeByCatContainer = document.querySelector('.categories__recipies');
 
 function displayRecepiesByCat(recipe) {
     //console.log(recipe);
@@ -79,17 +93,40 @@ function displayRecepiesByCat(recipe) {
 }
 
 
+// Function to display recipes based on the selected category
+async function displayRecipesByCategory(categoryId) {
+    try {
+      const response = await fetch(`/api/categories/${categoryId}/recipes/`);
+      if (response.ok) {
+        const recipes = await response.json();
+  
+        // Clear existing recipes from the container
+        ;
+        recipeByCatContainer.innerHTML = '';
+  
+        recipes.forEach(recipe => {
+          const card = createCard(recipe);
+          recipeByCatContainer.appendChild(card);
+        });
+      } else {
+        throw new Error('Something went wrong with fetching recipes');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+// Event listener for category selection
+categorySelect.addEventListener('change', () => {
+    const selectedCategoryId = categorySelect.value;
+    newest.textContent = '';
+    displayRecipesByCategory(selectedCategoryId);
+});
+
+
 function displayCategories(obj, categoryId) {
     const categoryContainer = document.querySelector('.categories__list');
     const categoryUl = categoryContainer.querySelector('.categories__block');
-
-    
-    const selectCategory = document.querySelector('#category');
-    const newOption = document.createElement('option');
-    const optionText = document.createTextNode(obj['name']);
-
-    newOption.appendChild(optionText);
-    selectCategory.appendChild(newOption);
 
 
     const li = document.createElement('li');
