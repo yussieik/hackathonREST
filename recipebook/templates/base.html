@@ -1,0 +1,45 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>{% block title %}{% endblock %}</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+</head>
+<body>
+<div class="wrapper">
+    {% block header %}
+        <header>
+        {% include "nav.html" %} 
+        </header>
+    {% endblock %}
+   
+    <!-- errors -->
+    {% if messages %}
+        <div class="messages">
+        {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}"{% endif %}>
+                {{ message }}
+            </div>
+        {% endfor %}
+        </div>
+	{% endif %}
+    
+    
+    <!-- content -->
+    <main>{% block content %}{% endblock %}</main>
+   <!-- footer -->
+    {% include "footer.html" %}  
+
+</div>
+
+<script src="{% static 'js/main.js' %}"> </script>
+</body>
+</html>

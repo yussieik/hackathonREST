@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Recipe book {% endblock %}
+
+
+
+{% block content%}
+<section class="slider">
+   <div class="container">
+      <div class="slider__row">
+         <div class="slider__description">
+            <h1>It is even better than <br>
+               an expensive <span>cookery book</span></h1>
+            <h5>Learn how to make your favorite restaurant's dishes</h5>
+         </div>
+         <div class="slider__search">
+            <label for="category">I want to make ...</label>
+            <select name="category" id="category">
+               
+            </select>
+         </div>
+      </div>
+   </div>
+</section>
+
+<section class="newest">
+   <div class="container">
+      <h2>Newest Recipes</h2>
+      <div class="subtitle">From breakfast treats to tender, juicy ground beef dishes and crave-worthy casseroles, our audience has made it clear what their favorite recipes</div>
+      <div class="last-recipes">
+         <div class="row row-cols-1 row-cols-sm-4 row-cols-lg-4 g-4 lastRecipes"></div>
+      </div>
+   </div>
+</section>
+
+<section class="categories">
+   <div class="container">
+      <h2>Browse Recipe Categories</h2>
+      <div class="subtitle">
+         From savoury dishes like quiches and frittatas to sweet treats like French toast and scones, these recipes will satisfy any craving. 
+      </div>
+      <div class="row">
+         <div class="col col-sm-4 col-lg-3 categories__list">
+            <h3>Categories</h3>
+            <ul class="categories__block"></ul>
+         </div>
+         <div class="col col-sm-8 col-lg-9 col-title">
+           <div class="categories__recipies row row-cols-1 row-cols-lg-4 g-4">
+               
+           </div>
+         </div>
+       </div>
+   </div>
+</section>
+
+<section class="desserts">
+   <div class="container">
+      <h2>Video Recipes</h2>
+   </div>
+</section>
+<div class="container">
+   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 catalog"></div>
+</div>
+{% endblock %}
