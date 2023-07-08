@@ -93,7 +93,7 @@ h4 {
 }
 
 .slider__search select {
-    background: transparent;
+    background: #fff;
     color: #000;
     border: 1px dotted #000;
     padding: 2px 11px;
@@ -325,6 +325,9 @@ footer {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
     max-width: 800px;
     width: 90%;
+    max-height: 80%;
+    overflow: scroll;
+    
 }
 
 /* Close button */

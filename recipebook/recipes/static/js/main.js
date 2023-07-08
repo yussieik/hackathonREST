@@ -318,8 +318,17 @@ function showIngredientsPopup(instructions, ingredients) {
         ingredientsList.appendChild(listItem);
     });
 
-    const instructionsText = document.createElement('p');
-    instructionsText.textContent = instructions;
+    const instructionsText = document.createElement('div');
+    if (instructions) {
+        const regex = /[.!?]+/g;
+        const sentences = instructions.split(regex);
+
+        sentences.forEach(sentence => {
+            const p = document.createElement('p');
+            p.textContent = `- ${sentence.trim()}`; // Trim any whitespace
+            instructionsText.appendChild(p);
+        });
+    }
 
     content.appendChild(titleNeed);
     content.appendChild(closeBtn);
@@ -330,10 +339,13 @@ function showIngredientsPopup(instructions, ingredients) {
 
     document.body.appendChild(popup);
 
+    document.body.style.position = 'fixed';
+
     //comparing if we click not on the content window (background) - remove popup
     popup.addEventListener('click', function (event) {
         if (event.target === popup) {
             document.body.removeChild(popup);
+            document.body.style.position = '';
         }
     });
 
@@ -341,6 +353,7 @@ function showIngredientsPopup(instructions, ingredients) {
     //close the popup on button
     closeBtn.addEventListener('click', function () {
         document.body.removeChild(popup);
+        document.body.style.position = '';
     });
 }
 
@@ -378,7 +391,7 @@ function displayLastRecipes(recipes) {
 
     //video
     randomRecipesVideo.textContent = '';
-    const recipesVideo = recipes.slice(0,8);
+    const recipesVideo = recipes.slice(10,18);
     recipesVideo.forEach(recipe => {
         const card = createVideoCard(recipe);
         randomRecipesVideo.appendChild(card);
