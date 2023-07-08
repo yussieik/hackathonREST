@@ -1,17 +1,21 @@
-
 const recipeByCatContainer = document.querySelector('.categories__recipies');
 const categorySelect = document.querySelector('#categorySelect');
 const newest = document.querySelector('.newest');
+const searchInput = document.querySelector('#searchInput');
+
 
 //get recipes, filter by CategoryID, call display func + display last recipes
-async function getRecipesList(categoryId) {
+async function getRecipesList(categoryId, searchQuery) {
     try {
         const response = await fetch('/api/recipes/');
 
         if (response.ok) {
             const getData = await response.json();
+
             const recipesByCategory = getData.filter(item => item.category === categoryId);
+            
             recipesByCategory.forEach(async item => {
+                //console.log(item);
                 displayRecepiesByCat(item);
             });
             displayLastRecipes(getData);
@@ -24,6 +28,8 @@ async function getRecipesList(categoryId) {
     }
 
 }
+
+
 
 //get info from API categories
 async function getCategoryList() {
@@ -41,7 +47,7 @@ async function getCategoryList() {
             });
 
             // initially category - Pork
-            const initialCategoryId = getData[8].id;
+            const initialCategoryId = getData[2].id;
             displayRecipesByCategory(initialCategoryId);
 
             //for select on the top
@@ -57,14 +63,12 @@ async function getCategoryList() {
                 const selectedIndex = categorySelect.selectedIndex;
                 const selectedCategoryId = categorySelect.options[selectedIndex].value;
 
-                newest.textContent = '';
+                newest.style.display = 'none';
 
                 const title = document.querySelector('.categories__title');
                 const subtitle = document.querySelector('.categories__subtitle');
                 subtitle.textContent = '';
 
-                // console.log('Selected Category ID:', selectedCategoryId);
-                // console.log('Categories Data:', getData);
 
                 //category.id - toString because i need to compare with the same types
                 const selectedCategory = getData.find(category => category.id.toString() === selectedCategoryId);
@@ -77,6 +81,13 @@ async function getCategoryList() {
                     title.textContent = '';
                 }
 
+                displayRecipesByCategory(selectedCategoryId);
+            });
+
+            //search
+            searchInput.addEventListener('input', () => {
+                const selectedCategoryId = categorySelect.value;
+                const searchQuery = searchInput.value;
                 displayRecipesByCategory(selectedCategoryId);
             });
 
@@ -117,7 +128,6 @@ function handleCategoryClick(categoryId) {
 function displayRecepiesByCat(recipe) {
     //console.log(recipe);
 
-
     const col = document.createElement('div');
     col.classList.add('col');
 
@@ -130,18 +140,22 @@ function displayRecepiesByCat(recipe) {
 
 // display recipes based on the selected category from select on the top
 async function displayRecipesByCategory(categoryId) {
+    
     try {
       const response = await fetch(`/api/categories/${categoryId}/recipes/`);
       if (response.ok) {
         const recipes = await response.json();
-  
+
         // Clear container
         recipeByCatContainer.textContent = '';
   
+        //show on page filtered by Category
         recipes.forEach(recipe => {
           const card = createCard(recipe);
           recipeByCatContainer.appendChild(card);
         });
+
+
       } else {
         throw new Error('Something went wrong with fetching recipes');
       }
@@ -168,8 +182,7 @@ function displayCategories(obj, categoryId) {
     a.addEventListener('click', function (event) {
         event.preventDefault();
 
-        const title = document.querySelector('.categories__title');
-        title.textContent = '';
+
         // Remove the "active" class from all category links
         const allCategoryLinks = categoryUl.querySelectorAll('li a');
         allCategoryLinks.forEach(link => link.classList.remove('active'));
@@ -234,6 +247,48 @@ function createCard(obj) {
 
     return card;
 }
+
+function createVideoCard(obj) {
+    const card = document.createElement('div');
+    card.classList.add('card', 'h-100');
+
+    const cardBody = document.createElement('div');
+    cardBody.classList.add('card-body');
+    const title = document.createElement('h4');
+    const titleText = document.createTextNode(obj['title']);
+
+    const img = document.createElement('img');
+    img.src = obj['img'];
+
+    card.appendChild(img);
+
+    // // Create a container element in the DOM
+    // const videoContainer = document.createElement('div');
+    // videoContainer.classList.add('video-container');
+
+    // // Access the video link from the object
+    // const videoLink = obj['video'];
+
+    // // Create an iframe element
+    // const videoIframe = document.createElement('iframe');
+    // videoIframe.src = videoLink;
+    // videoIframe.allowFullscreen = true;
+    // videoIframe.setAttribute('frameborder', '0');
+
+    card.addEventListener('click', () => {
+        window.open(obj['video'], '_blank');
+    })
+
+    title.appendChild(titleText);
+    cardBody.appendChild(title);
+    //cardBody.appendChild(videoIframe);
+    card.appendChild(cardBody);
+
+
+    return card;
+}
+
+
 
 
 function showIngredientsPopup(instructions, ingredients) {
@@ -307,6 +362,7 @@ function displayRecipes(obj) {
 function displayLastRecipes(recipes) {
 
     const lastRecipesContainer = document.querySelector('.lastRecipes');
+    const randomRecipesVideo = document.querySelector('.video__recipes');
 
     // Clear container
     lastRecipesContainer.textContent = '';
@@ -318,6 +374,14 @@ function displayLastRecipes(recipes) {
 
         const card = createCard(recipe);
         lastRecipesContainer.appendChild(card);
+    });
+
+    //video
+    randomRecipesVideo.textContent = '';
+    const recipesVideo = recipes.slice(0,8);
+    recipesVideo.forEach(recipe => {
+        const card = createVideoCard(recipe);
+        randomRecipesVideo.appendChild(card);
     });
 }
 
@@ -381,7 +445,7 @@ async function deleteRecipe(recipeId) {
 }
 
 // category CRUD
-async function createRecipe(categoryData) {
+async function createCategory(categoryData) {
     try {
         const response = await fetch('/api/categories/', {
             method: 'POST',
@@ -402,7 +466,7 @@ async function createRecipe(categoryData) {
     }
 }
 
-async function updateRecipe(categoryId, updatedData) {
+async function updateCategory(categoryId, updatedData) {
     try {
         const response = await fetch(`/api/categories/${categoryId}/`, {
             method: 'PUT',
@@ -440,7 +504,7 @@ async function deleteCategory(categoryId) {
 }
 
 // ingredient CRUD
-async function createRecipe(ingredientData) {
+async function createIngredient(ingredientData) {
     try {
         const response = await fetch('/api/ingredients/', {
             method: 'POST',
@@ -461,7 +525,7 @@ async function createRecipe(ingredientData) {
     }
 }
 
-async function updateRecipe(ingredientId, updatedData) {
+async function updateIngredient(ingredientId, updatedData) {
     try {
         const response = await fetch(`/api/ingredients/${ingredientId}/`, {
             method: 'PUT',
@@ -482,7 +546,7 @@ async function updateRecipe(ingredientId, updatedData) {
     }
 }
 
-async function deleteCategory(ingredientId) {
+async function deleteIngredient(ingredientId) {
     try {
         const response = await fetch(`/api/ingredients/${ingredientId}/`, {
             method: 'DELETE'

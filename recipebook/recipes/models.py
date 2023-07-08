@@ -20,6 +20,7 @@ class Recipe(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recipes')
     img = models.URLField()
     ingredients = models.ManyToManyField('Ingredient', related_name='recipes')
+    video = models.URLField()
 
     def __str__(self):
         return self.title

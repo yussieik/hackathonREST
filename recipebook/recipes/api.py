@@ -16,6 +16,7 @@ def save_data_from_api():
             title = meal['strMeal']
             instructions = meal['strInstructions']
             image_url = meal['strMealThumb']  # Fetch the image URL
+            video_url = meal['strYoutube']
             # Add more fields as needed
 
             # Create or retrieve the category
@@ -26,7 +27,7 @@ def save_data_from_api():
             default_author, _ = User.objects.get_or_create(username='default_author')
 
             # Create a new Recipe object
-            recipe = Recipe(title=title, instructions=instructions, category=category, author=default_author, img=image_url)  # Save the image URL
+            recipe = Recipe(title=title, instructions=instructions, category=category, author=default_author, img=image_url, video=video_url)  # Save the image URL
             recipe.save()
 
             # Save ingredients
