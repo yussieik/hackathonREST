@@ -29,18 +29,22 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+
+
 # Application definition
 
 INSTALLED_APPS = [
+    'bootstrap5',
+    'recipes',
+    'rest_framework',
+    'users',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'bootstrap5',
-    'recipes',
-    'rest_framework',
+    
     
 ]
 
@@ -125,9 +129,17 @@ STATIC_URL = 'static/'
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 STATIC_ROOT = os.path.join(PROJECT_PATH, 'static')
 
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 X_FRAME_OPTIONS = 'ALLOWALL'
+
+LOGIN_URL = 'login'
+
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # Directory where uploaded media is saved.
+MEDIA_URL = '/media/' # Public URL at the browser

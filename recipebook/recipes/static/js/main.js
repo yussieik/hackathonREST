@@ -217,11 +217,13 @@ function createCard(obj) {
     const readMore = document.createElement('a');
     readMore.href = '#';
     readMore.classList.add('read_more');
-    const instrText = document.createTextNode('Step by step guide...');
-
+    const readMoreText = document.createTextNode('Step by step guide...');
 
     const img = document.createElement('img');
     img.src = obj['img'];
+
+
+
 
     card.appendChild(img);
 
@@ -229,7 +231,7 @@ function createCard(obj) {
     cardBody.appendChild(title);
 
 
-    readMore.appendChild(instrText);
+    readMore.appendChild(readMoreText);
     cardFooter.appendChild(readMore);
 
     card.appendChild(cardBody);
@@ -293,7 +295,7 @@ function createVideoCard(obj) {
 
 function showIngredientsPopup(instructions, ingredients) {
     //console.log(ingredients);
-    // Create and display the popup window with ingredients
+    // popup window with ingredients and instructions
     const popup = document.createElement('div');
     popup.classList.add('popup');
 
@@ -339,13 +341,13 @@ function showIngredientsPopup(instructions, ingredients) {
 
     document.body.appendChild(popup);
 
-    document.body.style.position = 'fixed';
+    //document.body.style.position = 'fixed';
 
     //comparing if we click not on the content window (background) - remove popup
     popup.addEventListener('click', function (event) {
         if (event.target === popup) {
             document.body.removeChild(popup);
-            document.body.style.position = '';
+            //document.body.style.position = '';
         }
     });
 
@@ -353,8 +355,70 @@ function showIngredientsPopup(instructions, ingredients) {
     //close the popup on button
     closeBtn.addEventListener('click', function () {
         document.body.removeChild(popup);
-        document.body.style.position = '';
+        //document.body.style.position = '';
     });
+}
+
+const subscribeBtn = document.querySelector('#call__subscription');
+subscribeBtn.addEventListener('click', showNewsletters);
+
+function showNewsletters() {
+
+    const popup = document.createElement('div');
+    popup.classList.add('popup');
+
+    const content = document.createElement('div');
+    content.classList.add('popup-content', 'popup-subscr');
+
+    const closeBtn = document.createElement('span');
+    closeBtn.classList.add('close-btn');
+    closeBtn.innerHTML = '&times;';
+
+    //form
+    const myFormSubscr = document.createElement('form');
+
+    const labelName = document.createElement('label');
+    labelName.textContent = 'Write your name';
+
+    const inputName = document.createElement('input');
+    inputName.setAttribute("type", "text");
+    inputName.setAttribute("name", "userNameSubscription");
+    inputName.id = 'userNameSubscription';
+
+    const labelEmail = document.createElement('label');
+    labelEmail.textContent = 'Write your email';
+    const inputEmail = document.createElement('input');
+    inputEmail.setAttribute('type', 'email');
+    inputEmail.setAttribute('name', 'email');
+    inputEmail.id = 'userEmailSubscription';
+    
+    const btn = document.createElement('button');
+    btn.textContent = 'Subscribe';
+
+    myFormSubscr.appendChild(labelName);
+    myFormSubscr.appendChild(inputName);
+    myFormSubscr.appendChild(labelEmail);
+    myFormSubscr.appendChild(inputEmail);
+    myFormSubscr.appendChild(btn);
+    content.appendChild(myFormSubscr);
+
+   
+    content.appendChild(closeBtn);
+    popup.appendChild(content);
+    document.body.appendChild(popup);
+
+    // if we click not on the content window (background) - remove popup
+    popup.addEventListener('click', function (event) {
+        if (event.target === popup) {
+            document.body.removeChild(popup);
+        }
+    });
+
+    //close the popup on button
+    closeBtn.addEventListener('click', function () {
+        document.body.removeChild(popup);
+    });
+    
 }
 
 

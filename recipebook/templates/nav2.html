@@ -1,9 +1,9 @@
 {% load static %}
 
-<nav class="navbar navbar-expand-lg navbar-dark transparent mynav">
+<nav class="navbar navbar-expand-lg navbar-light transparent nav2" >
     <div class="container-md">
         <a class="navbar-brand" href="/home">
-            <img src="{% static 'img/logo.png' %}" alt="" width="200px">
+            <img src="{% static 'img/logo.svg' %}" alt="" width="200px">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
 
@@ -15,14 +15,14 @@
                 
             </form>
             <div class="d-flex align-items-center">
+                <div style="color:#000">Hello, <b>{{user}}</b></div>
                 {%if request.user.is_authenticated %}
-                <div class="user">Hello, <b>{{user}}</b></div>
-                <a class="btn btn-outline-light ms-2" href="{% url 'logout' %}">Logout</a>
-                <a class="btn btn-outline-light ms-2" href="{% url 'profile' %}">Profile</a>
+                <a class="btn btn-outline-dark ms-2" href="{% url 'logout' %}">Logout</a>
+                <a class="btn btn-outline-dark ms-2" href="{% url 'profile' %}">Profile</a>
 
                 {% else %}
-                <a class="btn btn-outline-light ms-2" href="{% url 'login' %}">Login</a>
-                <a class="btn btn-outline-light ms-2" href="{% url 'register' %}">Sign up</a>
+                <a class="btn btn-outline-dark ms-2" href="{% url 'login' %}">Login</a>
+                <a class="btn btn-outline-dark ms-2" href="{% url 'register' %}">Sign up</a>
                 {% endif %}
             </div>
         </div>
