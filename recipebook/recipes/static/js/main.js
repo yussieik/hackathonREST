@@ -243,7 +243,7 @@ function createCard(obj) {
         e.preventDefault();
 
         //got to show ingr + give they two params ingredients + instructions
-        showIngredientsPopup(obj['instructions'], obj['ingredients']);
+        showIngredientsPopup(obj['instructions'], obj['ingredients'], obj['video']);
     })
 
 
@@ -293,7 +293,7 @@ function createVideoCard(obj) {
 
 
 
-function showIngredientsPopup(instructions, ingredients) {
+function showIngredientsPopup(instructions, ingredients, video) {
     //console.log(ingredients);
     // popup window with ingredients and instructions
     const popup = document.createElement('div');
@@ -332,9 +332,17 @@ function showIngredientsPopup(instructions, ingredients) {
         });
     }
 
+    const videoElement = document.createElement('a');
+    videoElement.classList.add('video-link');
+    videoElement.href = video;
+    videoElement.setAttribute('target', '_blank');
+    videoElement.textContent = `Watch video: ${video}`;
+    
+
     content.appendChild(titleNeed);
     content.appendChild(closeBtn);
     content.appendChild(ingredientsList);
+    content.appendChild(videoElement);
     content.appendChild(titleStep);
     content.appendChild(instructionsText);
     popup.appendChild(content);
