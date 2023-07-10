@@ -5,14 +5,19 @@ from rest_framework.permissions import (AllowAny,IsAuthenticated)
 from .serializers import *
 from rest_framework.generics import (ListAPIView, CreateAPIView, RetrieveUpdateDestroyAPIView)
 from django.shortcuts import render
+from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from .models import Category, Recipe
 from .serializers import CategorySerializer, RecipeSerializer
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 
 def home(request):
    return render(request, 'recipes/index.html')
+
 
 # all recipes
 class RecipeListView(ListAPIView):

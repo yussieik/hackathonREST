@@ -4,8 +4,41 @@ const newest = document.querySelector('.newest');
 const searchInput = document.querySelector('#searchInput');
 
 
+// listener to the search input
+searchInput.addEventListener('input', () => {
+    const searchQuery = searchInput.value.trim(); // Trim whitespace from the search input
+    getAllRecipes(searchQuery);
+});
+
+
+async function getAllRecipes(searchQuery = '') {
+    try {
+        const response = await fetch('/api/recipes/');
+
+        if (response.ok) {
+            const allRecipes = await response.json();
+
+            // Filter recipes based on the title search query
+            const filteredRecipes = allRecipes.filter(recipe => recipe.title.toLowerCase().includes(searchQuery.toLowerCase()));
+    
+            // Clear container
+            recipeByCatContainer.textContent = '';
+    
+            // Show filtered recipes
+            filteredRecipes.forEach(recipe => {
+                const card = createCard(recipe);
+                recipeByCatContainer.appendChild(card);
+            });
+        } else {
+            throw new Error('Something went wrong with fetching all recipes');
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 //get recipes, filter by CategoryID, call display func + display last recipes
-async function getRecipesList(categoryId, searchQuery) {
+async function getRecipesList(categoryId) {
     try {
         const response = await fetch('/api/recipes/');
 
@@ -13,7 +46,7 @@ async function getRecipesList(categoryId, searchQuery) {
             const getData = await response.json();
 
             const recipesByCategory = getData.filter(item => item.category === categoryId);
-            
+
             recipesByCategory.forEach(async item => {
                 //console.log(item);
                 displayRecepiesByCat(item);
@@ -30,16 +63,15 @@ async function getRecipesList(categoryId, searchQuery) {
 }
 
 
-
 //get info from API categories
 async function getCategoryList() {
-    
+
     try {
         const response = await fetch('/api/categories/');
         if (response.ok) {
             const getData = await response.json();
             //console.log(getData); // array of objects: ID + category name
-            
+
             //for display list of category's names in the middle of page
             getData.forEach(async (item) => {
                 //go to show func
@@ -84,13 +116,6 @@ async function getCategoryList() {
                 displayRecipesByCategory(selectedCategoryId);
             });
 
-            //search
-            searchInput.addEventListener('input', () => {
-                const selectedCategoryId = categorySelect.value;
-                const searchQuery = searchInput.value;
-                displayRecipesByCategory(selectedCategoryId);
-            });
-
         } else {
             throw new Error('Something wrong with fetch');
         }
@@ -100,7 +125,6 @@ async function getCategoryList() {
     }
 
 }
-
 
 
 //when was click event on a category element - fetch the recipes for that category
@@ -138,24 +162,23 @@ function displayRecepiesByCat(recipe) {
 }
 
 
-// display recipes based on the selected category from select on the top
-async function displayRecipesByCategory(categoryId) {
-    
+async function displayRecipesByCategory(categoryId, searchQuery = '') {
     try {
       const response = await fetch(`/api/categories/${categoryId}/recipes/`);
       if (response.ok) {
         const recipes = await response.json();
-
+  
+        // Filter recipes based on the title search query
+        const filteredRecipes = recipes.filter(recipe => recipe.title.toLowerCase().includes(searchQuery.toLowerCase()));
+  
         // Clear container
         recipeByCatContainer.textContent = '';
   
-        //show on page filtered by Category
-        recipes.forEach(recipe => {
+        // Show filtered recipes
+        filteredRecipes.forEach(recipe => {
           const card = createCard(recipe);
           recipeByCatContainer.appendChild(card);
         });
-
-
       } else {
         throw new Error('Something went wrong with fetching recipes');
       }
@@ -214,6 +237,8 @@ function createCard(obj) {
 
     const cardFooter = document.createElement('div');
     cardFooter.classList.add('card-footer');
+
+
     const readMore = document.createElement('a');
     readMore.href = '#';
     readMore.classList.add('read_more');
@@ -223,16 +248,15 @@ function createCard(obj) {
     img.src = obj['img'];
 
 
-
-
     card.appendChild(img);
 
     title.appendChild(titleText);
     cardBody.appendChild(title);
 
-
     readMore.appendChild(readMoreText);
     cardFooter.appendChild(readMore);
+
+
 
     card.appendChild(cardBody);
     card.appendChild(cardFooter);
@@ -247,8 +271,11 @@ function createCard(obj) {
     })
 
 
+
     return card;
 }
+
+
 
 function createVideoCard(obj) {
     const card = document.createElement('div');
@@ -289,8 +316,6 @@ function createVideoCard(obj) {
 
     return card;
 }
-
-
 
 
 function showIngredientsPopup(instructions, ingredients, video) {
@@ -336,8 +361,8 @@ function showIngredientsPopup(instructions, ingredients, video) {
     videoElement.classList.add('video-link');
     videoElement.href = video;
     videoElement.setAttribute('target', '_blank');
-    videoElement.textContent = `Watch video: ${video}`;
-    
+    videoElement.textContent = `Watch video YouTube`;
+
 
     content.appendChild(titleNeed);
     content.appendChild(closeBtn);
@@ -399,7 +424,7 @@ function showNewsletters() {
     inputEmail.setAttribute('type', 'email');
     inputEmail.setAttribute('name', 'email');
     inputEmail.id = 'userEmailSubscription';
-    
+
     const btn = document.createElement('button');
     btn.textContent = 'Subscribe';
 
@@ -410,7 +435,7 @@ function showNewsletters() {
     myFormSubscr.appendChild(btn);
     content.appendChild(myFormSubscr);
 
-   
+
     content.appendChild(closeBtn);
     popup.appendChild(content);
     document.body.appendChild(popup);
@@ -426,7 +451,7 @@ function showNewsletters() {
     closeBtn.addEventListener('click', function () {
         document.body.removeChild(popup);
     });
-    
+
 }
 
 
@@ -463,12 +488,15 @@ function displayLastRecipes(recipes) {
 
     //video
     randomRecipesVideo.textContent = '';
-    const recipesVideo = recipes.slice(10,18);
+    const recipesVideo = recipes.slice(10, 18);
     recipesVideo.forEach(recipe => {
         const card = createVideoCard(recipe);
         randomRecipesVideo.appendChild(card);
     });
 }
+
+
+
 
 //recipe CRUD
 async function createRecipe(recipeData) {
@@ -647,7 +675,7 @@ async function deleteIngredient(ingredientId) {
     }
 }
 
+getAllRecipes()
 getCategoryList()
 getRecipesList()
-
 

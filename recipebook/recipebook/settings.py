@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'bootstrap5',
     'recipes',
     'rest_framework',
+    "rest_framework.authtoken",
     'users',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -47,6 +48,12 @@ INSTALLED_APPS = [
     
     
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

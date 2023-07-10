@@ -8,12 +8,7 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
 
         <div class="collapse navbar-collapse justify-content-end" id="navbarScroll">
-            <form class="d-flex mx-5">
-                <input class="form-control me-2" type="search" id="searchInput" placeholder="Find dishes by name ..." aria-label="Search">
-                
-
-                
-            </form>
+            
             <div class="d-flex align-items-center">
                 <div style="color:#000">Hello, <b>{{user}}</b></div>
                 {%if request.user.is_authenticated %}
