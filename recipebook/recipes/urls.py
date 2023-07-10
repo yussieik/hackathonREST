@@ -15,5 +15,5 @@ urlpatterns = [
     path('api/ingredients/', IngredientListView.as_view(), name='ingredient-list'),
     path('api/ingredients/create/', IngredientCreateView.as_view(), name='category-api'),
     path('api/ingredients/<int:pk>', IngredientRetrieveUpdateDestroyView.as_view(), name='category-detail'),
-    
+    path('api/favorites/', Favorites.as_view(), name='favorites'),
 ]

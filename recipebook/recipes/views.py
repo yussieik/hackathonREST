@@ -1,5 +1,5 @@
 from .models import *
-import requests
+from rest_framework import status
 from rest_framework import generics
 from rest_framework.permissions import (AllowAny,IsAuthenticated)
 from .serializers import *
@@ -18,6 +18,26 @@ from django.contrib.auth.decorators import login_required
 def home(request):
    return render(request, 'recipes/index.html')
 
+class Favorites(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def post(self, request):
+        recipe_id = request.data.get('id')
+        user = request.user
+
+        try:
+            recipe = Recipe.objects.get(id=recipe_id)
+        except Recipe.DoesNotExist:
+            return Response({'error': 'Recipe not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        if recipe.favorited_by.filter(id=user.id).exists():
+            # Recipe already favorited by the user, remove it from favorites
+            recipe.favorited_by.remove(user)
+            return Response({'status': 'Recipe removed from favorites'}, status=status.HTTP_200_OK)
+        else:
+            # Recipe not favorited by the user, add it to favorites
+            recipe.favorited_by.add(user)
+            return Response({'status': 'Recipe added to favorites'}, status=status.HTTP_201_CREATED)
 
 # all recipes
 class RecipeListView(ListAPIView):

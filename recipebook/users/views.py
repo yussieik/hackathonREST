@@ -52,7 +52,7 @@ def sign_up(request):
             user.save()
             messages.success(request, 'You have singed up successfully.')
             login(request, user)
-            return redirect('posts')
+            return redirect('home')
         else:
             return render(request, 'users/register.html', {'form': form})
     

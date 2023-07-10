@@ -18,6 +18,7 @@ class Recipe(models.Model):
     instructions = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='recipes')
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recipes')
+    favorited_by = models.ManyToManyField(User, related_name='favorite_recipes')
     img = models.URLField()
     ingredients = models.ManyToManyField('Ingredient', related_name='recipes')
     video = models.URLField()

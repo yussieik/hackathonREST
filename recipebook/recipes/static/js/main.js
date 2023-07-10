@@ -248,6 +248,28 @@ function createCard(obj) {
     img.src = obj['img'];
 
 
+    const addToFavorites = document.createElement('button');
+    addToFavorites.textContent = 'Add to Favorites';
+    addToFavorites.classList.add('favor');
+    addToFavorites.addEventListener('click', async () => {
+        const response = await fetch('/api/favorites/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer 13742846ef547815e0f0279bb58f8ca62d1c37f4' // Replace with your authentication token
+            },
+            body: JSON.stringify({ id: obj.id })
+        });
+
+        if (response.ok) {
+            const responseData = await response.json();
+            console.log(responseData);
+        } else {
+            console.error('Error adding to favorites');
+        }
+    });
+
+
     card.appendChild(img);
 
     title.appendChild(titleText);
@@ -256,20 +278,19 @@ function createCard(obj) {
     readMore.appendChild(readMoreText);
     cardFooter.appendChild(readMore);
 
-
+    cardBody.appendChild(addToFavorites);
 
     card.appendChild(cardBody);
     card.appendChild(cardFooter);
 
 
     //for popup window after click on card
-    card.addEventListener(('click'), (e) => {
+    readMore.addEventListener(('click'), (e) => {
         e.preventDefault();
 
         //got to show ingr + give they two params ingredients + instructions
         showIngredientsPopup(obj['instructions'], obj['ingredients'], obj['video']);
     })
-
 
 
     return card;
@@ -496,8 +517,6 @@ function displayLastRecipes(recipes) {
 }
 
 
-
-
 //recipe CRUD
 async function createRecipe(recipeData) {
     try {
@@ -675,7 +694,8 @@ async function deleteIngredient(ingredientId) {
     }
 }
 
-getAllRecipes()
+
 getCategoryList()
 getRecipesList()
+
 
