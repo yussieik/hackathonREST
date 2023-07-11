@@ -39,6 +39,7 @@ async function getAllRecipes(searchQuery = '') {
 
 //get recipes, filter by CategoryID, call display func + display last recipes
 async function getRecipesList(categoryId) {
+
     try {
         const response = await fetch('/api/recipes/');
 
@@ -238,7 +239,6 @@ function createCard(obj) {
     const cardFooter = document.createElement('div');
     cardFooter.classList.add('card-footer');
 
-
     const readMore = document.createElement('a');
     readMore.href = '#';
     readMore.classList.add('read_more');
@@ -256,7 +256,7 @@ function createCard(obj) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer 13742846ef547815e0f0279bb58f8ca62d1c37f4' // Replace with your authentication token
+                //'Authorization': 'Bearer 13742846ef547815e0f0279bb58f8ca62d1c37f4' 
             },
             body: JSON.stringify({ id: obj.id })
         });
@@ -312,18 +312,6 @@ function createVideoCard(obj) {
 
     card.appendChild(img);
 
-    // // Create a container element in the DOM
-    // const videoContainer = document.createElement('div');
-    // videoContainer.classList.add('video-container');
-
-    // // Access the video link from the object
-    // const videoLink = obj['video'];
-
-    // // Create an iframe element
-    // const videoIframe = document.createElement('iframe');
-    // videoIframe.src = videoLink;
-    // videoIframe.allowFullscreen = true;
-    // videoIframe.setAttribute('frameborder', '0');
 
     card.addEventListener('click', () => {
         window.open(obj['video'], '_blank');
@@ -331,7 +319,6 @@ function createVideoCard(obj) {
 
     title.appendChild(titleText);
     cardBody.appendChild(title);
-    //cardBody.appendChild(videoIframe);
     card.appendChild(cardBody);
 
 

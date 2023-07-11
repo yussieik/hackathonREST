@@ -4,7 +4,7 @@ from .views import *
 
 
 urlpatterns = [
-    path('home/', home, name='home'),
+    path('home/', views.home, name='home'),
     path('api/recipes/', RecipeListView.as_view(), name='recipe-list'),
     path('api/recipes/create/', RecipeCreateView.as_view(), name='recipe-create'),
     path('api/recipes/<int:pk>/', RecipeRetrieveUpdateDestroyView.as_view(), name='recipe-detail'),
@@ -16,4 +16,5 @@ urlpatterns = [
     path('api/ingredients/create/', IngredientCreateView.as_view(), name='category-api'),
     path('api/ingredients/<int:pk>', IngredientRetrieveUpdateDestroyView.as_view(), name='category-detail'),
     path('api/favorites/', Favorites.as_view(), name='favorites'),
+    
 ]

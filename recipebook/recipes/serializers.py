@@ -20,11 +20,11 @@ class RecipeSerializer(serializers.ModelSerializer):
         fields = '__all__'
     
     #provide the count of users who have favorited the recipe
-    def get_favorited_by_count(self, obj):
-        return obj.favorited_by.count()
+    # def get_favorited_by_count(self, obj):
+    #     return obj.favorited_by.count()
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation['favorited_by_count'] = self.get_favorited_by_count(instance)
-        return representation
+    # def to_representation(self, instance):
+    #     representation = super().to_representation(instance)
+    #     representation['favorited_by_count'] = self.get_favorited_by_count(instance)
+    #     return representation
 

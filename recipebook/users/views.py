@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from .forms import LoginForm, RegisterForm, ProfileUpdateForm, UserUpdateForm
 from django.contrib.auth.decorators import login_required
+from recipes.models import Recipe
 
 
 
@@ -73,16 +74,17 @@ def register(request):
 # Update it here
 @login_required
 def profile(request):
+    favorite_recipes = Recipe.objects.filter(favorite=True)
+    
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
-        p_form = ProfileUpdateForm(request.POST,
-                                   request.FILES,
-                                   instance=request.user.profile)
+        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
             messages.success(request, f'Your account has been updated!')
-            return redirect('profile') # Redirect back to profile page
+            return redirect('profile')  # Redirect back to profile page
 
     else:
         u_form = UserUpdateForm(instance=request.user)
@@ -90,7 +92,21 @@ def profile(request):
 
     context = {
         'u_form': u_form,
-        'p_form': p_form
+        'p_form': p_form,
+        'favorite_recipes': favorite_recipes
     }
 
     return render(request, 'users/profile.html', context)
+
+def remove_favorite(request):
+    if request.method == 'POST':
+        recipe_id = request.POST.get('recipe_id')
+        try:
+            recipe = Recipe.objects.get(id=recipe_id)
+            recipe.favorite = False
+            recipe.save()
+            messages.success(request, 'Recipe removed from favorites.')
+        except Recipe.DoesNotExist:
+            messages.error(request, 'Recipe not found.')
+    
+    return redirect('profile')
