@@ -38,16 +38,20 @@
                 {% if favorite_recipes %}
                     {% for recipe in favorite_recipes %}
                         <div class="recipe">
-                            <h3>{{ recipe.title }}</h3>
-                            <img src="{{ recipe.img }}" alt="" width="150">
-                            <a href = "{{ recipe.video }}">Watch video guide</a>
+                            <div class="recipe__left">
+                                <img src="{{ recipe.img }}" alt="" width="150">
+                            </div>
+
+                            <div class="recipe__right">
+                                <h3>{{ recipe.title }}</h3>
+                                <a href = "{{ recipe.video }}" class="recipe__favorite-video">Watch video guide</a>
+                                <form action="{% url 'remove_favorite' %}" method="POST" class="recipe__favorite">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="recipe_id" value="{{ recipe.id }}">
+                                    <button class="btn btn-outline-danger" type="submit">Remove from Favorites</button>
+                                </form>
+                            </div>
                             
-                            <!-- Display other recipe details as needed -->
-                            <form action="{% url 'remove_favorite' %}" method="POST">
-                                {% csrf_token %}
-                                <input type="hidden" name="recipe_id" value="{{ recipe.id }}">
-                                <button class="btn btn-outline-danger" type="submit">Remove from Favorites</button>
-                            </form>
                         </div>
                     {% endfor %}
                 {% else %}

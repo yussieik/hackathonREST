@@ -249,8 +249,15 @@ function createCard(obj) {
 
 
     const addToFavorites = document.createElement('button');
-    addToFavorites.textContent = 'Add to Favorites';
     addToFavorites.classList.add('favor');
+    addToFavorites.textContent = 'Add to Favorites';
+
+    if (obj.favorite) {
+        addToFavorites.textContent = 'Remove';
+        addToFavorites.classList.add('red');
+    }
+
+    
     addToFavorites.addEventListener('click', async () => {
         const response = await fetch('/api/favorites/', {
             method: 'POST',
@@ -264,6 +271,15 @@ function createCard(obj) {
         if (response.ok) {
             const responseData = await response.json();
             console.log(responseData);
+
+            
+            if (addToFavorites.textContent === 'Add to Favorites') {
+                addToFavorites.textContent = 'Remove';
+                addToFavorites.classList.add('red');
+            } else {
+                addToFavorites.textContent = 'Add to Favorites';
+                addToFavorites.classList.remove('red');
+            }
         } else {
             console.error('Error adding to favorites');
         }
